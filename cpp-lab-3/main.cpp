@@ -108,8 +108,7 @@ int main()
     int n;
     cin >> n;
 
-    long long int left[n / 2];
-    long long int right[n / 2 + n % 2];
+    long long int left[n / 2], right[n / 2 + n % 2];
     long long total_sum = 0;
 
     for (int i = 0; i < n / 2; i++)
