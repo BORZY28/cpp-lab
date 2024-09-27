@@ -3,28 +3,30 @@ using namespace std;
 
 void merge(long long arr[], long long left, long long mid, long long right)
 {
-    long long n1 = mid - left + 1;
-    long long n2 = right - mid;
+    long long l1 = mid - left + 1;
+    long long l2 = right - mid;
 
-    long long *L = new long long[n1];
-    long long *R = new long long[n2];
+    long long L[l1]; 
+    long long R[l2];
 
-    for (long long i = 0; i < n1; i++)
+    for (long long i = 0; i < l1; i++)
         L[i] = arr[left + i];
-    for (long long j = 0; j < n2; j++)
-        R[j] = arr[mid + 1 + j];
 
+    for (long long j = 0; j < l2; j++)
+        R[j] = arr[mid + 1 + j];
+    
     long long i = 0;
     long long j = 0;
     long long k = left;
 
-    while (i < n1 && j < n2)
+    while (i < l1 && j < l2)
     {
         if (L[i] <= R[j])
         {
             arr[k] = L[i];
             i++;
         }
+
         else
         {
             arr[k] = R[j];
@@ -33,36 +35,34 @@ void merge(long long arr[], long long left, long long mid, long long right)
         k++;
     }
 
-    while (i < n1)
+    while (i < l1)
     {
         arr[k] = L[i];
         i++;
         k++;
     }
 
-    while (j < n2)
+    while(j < l2)
     {
         arr[k] = R[j];
         j++;
         k++;
     }
-
-    delete[] L;
-    delete[] R;
 }
 
-void mergeSort(long long arr[], long long left, long long right)
+void Merge_Sort(long long arr[], long long left, long long right)
 {
     if (left < right)
     {
-        long long mid = left + (right - left) / 2;
+        long long mid = left + (right - left)/2;
 
-        mergeSort(arr, left, mid);
-        mergeSort(arr, mid + 1, right);
+        Merge_Sort(arr, left, mid);
+        Merge_Sort(arr, mid+1, right);
 
         merge(arr, left, mid, right);
     }
 }
+
 void fill_sums_array(long long int arr[], long long int size, long long int weights_array[])
 {
     for (long long int mask = 0; mask < (1 << size); ++mask)
@@ -130,7 +130,7 @@ int main()
     fill_sums_array(leftSums, n / 2, left);
     fill_sums_array(rightSums, n / 2 + n % 2, right);
 
-    mergeSort(rightSums, 0, (1 << n / 2 + n % 2) - 1);
+    Merge_Sort(rightSums, 0, (1 << n / 2 + n % 2) - 1);
 
     for (long long left_sum : leftSums)
     {
