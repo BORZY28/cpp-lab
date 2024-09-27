@@ -63,7 +63,31 @@ void Merge_Sort(long long arr[], long long left, long long right)
     }
 }
 
-void fill_sums_array(long long int arr[], long long int size, long long int weights_array[])
+long long binary_search(long long int arr[], long long size, long long number)
+{
+    int left = 0, right = size-1;
+    int result = -1;
+
+    while (left <= right)
+    {
+        int mid = left + (right - left)/2;
+
+        if (arr[mid] <= number)
+        {
+            result = arr[mid];
+            left = mid+1;
+        }
+
+        else
+        {
+            right = mid - 1;
+        }
+    }
+
+    return number - result;
+}
+
+void fill_sums_array(long long int arr[], long long size, long long weights_array[])
 {
     for (long long int mask = 0; mask < (1 << size); ++mask)
     {
@@ -77,29 +101,6 @@ void fill_sums_array(long long int arr[], long long int size, long long int weig
         }
         arr[mask] = sum;
     }
-}
-
-long long binarySearch(long long int arr[], long long int size, long long int target)
-{
-    int left = 0, right = size - 1;
-    int result = -1;
-
-    while (left <= right)
-    {
-        int mid = left + (right - left) / 2;
-
-        if (arr[mid] <= target)
-        {
-            result = arr[mid];
-            left = mid + 1;
-        }
-        else
-        {
-            right = mid - 1;
-        }
-    }
-
-    return target - result;
 }
 
 int main()
@@ -135,7 +136,7 @@ int main()
     for (long long left_sum : leftSums)
     {
         if (left_sum <= target)
-            min_diff = min(min_diff, 2 * binarySearch(rightSums, 1 << (n / 2 + n % 2), target - left_sum) + total_sum % 2);
+            min_diff = min(min_diff, 2 * binary_search(rightSums, 1 << (n / 2 + n % 2), target - left_sum) + total_sum % 2);
     }
 
     cout << min_diff << endl;
