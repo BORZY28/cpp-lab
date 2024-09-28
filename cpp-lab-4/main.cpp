@@ -45,10 +45,11 @@ void test(long int n, char *name_out, char *name_exp)
 
 int main()
 {
-
-    test(10000, "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_2.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_2.txt");
-    test(99999, "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_3.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_3.txt");
-    kasha(53748, "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_4.txt");
+    test(17237842, "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_1.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_1.txt");
+    test(10000,    "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_2.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_2.txt");
+    test(99999,    "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_3.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_3.txt");
+    test(10000000, "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_4.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_4.txt");
+    test(37263,    "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_5.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_5.txt");
 
     return 0;
 
