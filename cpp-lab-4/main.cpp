@@ -1,81 +1,55 @@
 #include <iostream>
+#include "kasha.lib"
+#include <fstream>
+#include <time.h>
 
 using namespace std;
 
-long long int sum_ar_pr(long int first, long int last)
-{
-    return ((first + last)*(last))/2;
-}
+void test(long int n, char *name_out, char *name_exp)
+    {
+        int start = clock();
+        kasha(n, name_out);
+        int finish = clock();
+
+        float time = float(finish - start)/1000000;
+
+        string s1, s2, s;
+
+        ifstream f_1(name_exp);
+        
+        while (getline(f_1, s))
+        {
+            s1 += s;
+        }
+
+        f_1.close();
+
+        ifstream f_2(name_out);
+
+        while (getline(f_2, s))
+        {
+            s2 += s;
+        }
+        
+        f_2.close();
+
+        if (time <= 1.0 && s1 == s2)
+            cout << "Test OK | time -> " << time<< endl;
+        
+        else if (time > 1.0)
+            cout << "RunTime Error | time -> " << time<< endl;
+
+        else
+            cout << "Test Error exp != out | time -> " << time << endl;
+    }   
 
 int main()
 {
 
-    long int n;
-    long long int sum, all_sum;
-    long int i = 0; long int j = 0;
-    long int c = 0;
-
-    cout << "Введите число n -> ";
-    cin >> n;
-
-    all_sum = sum_ar_pr(1, n);
-
-    long long target = all_sum/2;
-    long int arr_1[n], arr_2[n];
-
-    if (all_sum%2 == 0)
-    {
-        sum = 0;
-
-        while (c < n)
-        {
-            if (sum + n-c <= target)
-            {
-                sum += n-c;
-                arr_1[i] = n-c;
-                i++;
-
-            }
-            else
-            {
-                arr_2[j] = n-c;
-                j++;
-            }
-
-            c++;
-        }
-
-        cout << "YES" << endl;
-
-        cout << i << endl;
-
-        for (long int i = 0; i < n; i++)
-        {
-            if (1 <= arr_1[i] && arr_1[i] <= n)
-                cout << arr_1[i] << " ";
-            else
-                break;
-        }
-            
-
-        cout << endl;
-        cout << j << endl;
-
-        for (long int i = 0; i < n; i++)
-        {
-            if (1 <= arr_2[i] && arr_2[i] <= n)
-                cout << arr_2[i] << " ";
-            else
-                break;
-        }        
-        
-        cout << endl;
-    } 
-
-    else
-    {
-        cout << "NO" << endl;
-    }
+    test(10000, "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_2.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_2.txt");
+    test(99999, "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/out_3.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_3.txt");
+    kasha(53748, "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-4/tests/exp_4.txt");
 
     return 0;
+
 }

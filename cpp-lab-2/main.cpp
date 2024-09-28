@@ -51,7 +51,6 @@ void test(double x, long double y)
 
     if (abs(k) < 0.00000000000001 && float(finish - start)/1000 <= 1.0)
     {
-        int finish = clock();
         cout << "Test OK " << float(finish - start) / 1000 << endl;
     } 
 
