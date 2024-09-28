@@ -1,0 +1,90 @@
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+long int sum_ar_pr(long int first, long int last)
+{
+    return ((first + last)*(last))/2;
+}
+
+void kasha(long long int n, char *name)
+{
+    unsigned long long int sum, all_sum;
+    long long int i = 0; long long int j = 0;
+    long long int c = 0;
+
+    all_sum = sum_ar_pr(1, n);
+
+    long target = all_sum/2;
+    long int * arr_1; long int * arr_2;
+
+    arr_1 = new long int [n];
+    arr_2 = new long int [n];
+
+
+    if (all_sum%2 == 0)
+    {
+        sum = 0;
+
+        while (c < n)
+        {
+            if (sum + n-c <= target)
+            {
+                sum += n-c;
+                arr_1[i] = n-c;
+                i++;
+
+            }
+
+            else
+            {
+                arr_2[j] = n-c;
+                j++;
+            }
+            c++;
+        }
+
+        ofstream f(name);
+
+        f << "YES" << endl;
+
+        f << i << endl;
+
+        for (long long int i = 0; i < n; i++)
+        {
+            if (1 <= arr_1[i] && arr_1[i] <= n)
+                f << arr_1[i] << " ";
+            else
+                break;
+        }
+            
+
+        f << endl;
+        f << n-i << endl;
+
+        for (long long int i = 0; i < n; i++)
+        {
+            if (1 <= arr_2[i] && arr_2[i] <= n)
+                f << arr_2[i] << " ";
+            else
+                break;
+        }        
+        
+        f << endl;
+
+        f.close();
+    } 
+
+    else
+    {
+        ofstream f(name);
+
+        f << "NO" << endl;
+
+        f.close();
+    }
+
+    delete[] arr_1;
+    delete[] arr_2;
+}
