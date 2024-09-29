@@ -6,7 +6,7 @@ using namespace std;
 void kasha(long long int n, char *name)
 {
     unsigned long long int all_sum;
-    long long int c_1 = ; long long int c_2 = 0;
+    long long int c_1 = 0, c_2 = 0;
     long long int c = 0;
 
     all_sum = (1+n)*n/2;
