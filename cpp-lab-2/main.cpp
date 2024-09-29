@@ -49,9 +49,9 @@ void test(double x, long double y)
     long double k = f(x) - y;
     int finish = clock();
 
-    if (abs(k) < 0.00000000000001 && float(finish - start)/1000 <= 1.0)
+    if (abs(k) < 0.00000000000001 && float(finish - start)/1000000 <= 1.0)
     {
-        cout << "Test OK " << float(finish - start) / 1000 << endl;
+        cout << "Test OK " << float(finish - start)/1000000 << endl;
     } 
 
     else 
