@@ -3,72 +3,57 @@
 
 using namespace std;
 
-long int sum_ar_pr(long int first, long int last)
-{
-    return ((first + last)*(last))/2;
-}
-
 void kasha(long long int n, char *name)
 {
-    unsigned long long int sum, all_sum;
-    long long int i = 0; long long int j = 0;
+    unsigned long long int all_sum;
+    long long int c_1 = ; long long int c_2 = 0;
     long long int c = 0;
 
-    all_sum = sum_ar_pr(1, n);
+    all_sum = (1+n)*n/2;
 
     long target = all_sum/2;
-    long int * arr_1; long int * arr_2;
-
-    arr_1 = new long int [n];
-    arr_2 = new long int [n];
 
 
     if (all_sum%2 == 0)
     {
         sum = 0;
 
-        while (c < n)
-        {
-            if (sum + n-c <= target)
-            {
-                sum += n-c;
-                arr_1[i] = n-c;
-                i++;
-
-            }
-
-            else
-            {
-                arr_2[j] = n-c;
-                j++;
-            }
-            c++;
-        }
-
         ofstream f(name);
 
         f << "YES" << endl;
 
-        f << i << endl;
-
-        for (long long int i = 0; i < n; i++)
+        long int i = n;
+        while (target - i > 0)
         {
-            if (1 <= arr_1[i] && arr_1[i] <= n)
-                f << arr_1[i] << " ";
-            else
-                break;
+            c++;
+            target -= i;
+            i--;
         }
-            
 
-        f << endl;
-        f << n-i << endl;
+        f << c_1 << endl;
 
-        for (long long int i = 0; i < n; i++)
+        target = all_sum/2
+
+        for (long long int i = n; i >= 0; i--)
         {
-            if (1 <= arr_2[i] && arr_2[i] <= n)
-                f << arr_2[i] << " ";
+            if (target - i >= 0)
+                {target -= i; f << i << " ";}
+        }        
+            
+        f << endl;
+        
+        c_2 = n - c_1;
+        target = all_sum/2
+
+        f << c_2 << endl;
+
+        for (long long int i = n; i >= 0; i--)
+        {
+            if (target - i >= 0)
+                target -= i
+                
             else
-                break;
+                f << i << " ";
         }        
         
         f << endl;
@@ -85,6 +70,4 @@ void kasha(long long int n, char *name)
         f.close();
     }
 
-    delete[] arr_1;
-    delete[] arr_2;
 }
