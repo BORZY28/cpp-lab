@@ -16,8 +16,6 @@ void kasha(long long int n, char *name)
 
     if (all_sum%2 == 0)
     {
-        sum = 0;
-
         ofstream f(name);
 
         f << "YES" << endl;
@@ -32,7 +30,7 @@ void kasha(long long int n, char *name)
 
         f << c_1 << endl;
 
-        target = all_sum/2
+        target = all_sum/2;
 
         for (long long int i = n; i >= 0; i--)
         {
@@ -43,14 +41,14 @@ void kasha(long long int n, char *name)
         f << endl;
         
         c_2 = n - c_1;
-        target = all_sum/2
+        target = all_sum/2;
 
         f << c_2 << endl;
 
         for (long long int i = n; i >= 0; i--)
         {
             if (target - i >= 0)
-                target -= i
+                target -= i;
                 
             else
                 f << i << " ";
