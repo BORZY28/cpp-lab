@@ -157,25 +157,25 @@ long kasha(char *in_)
 
     delete[] leftSums;
     delete[] rightSums;
+
+    return min_diff;
 }
 
 
 void test(char *read, char *exp)
 {
-    int start, finish;
-    float time;
-
     long n1, n2;
 
     ifstream f1(exp);
     f1 >> n1;
     f1.close();
 
-    start = clock();
+    int start = clock();
     n2 = kasha(read);
-    finish = clock();
+    int finish = clock();
 
-    time = (finish - start)/1000000;
+
+    float time = float(finish - start)/1000000;
 
     if (n1 == n2 && time <= 1)
         cout << "Test OK | time -> " << time << endl; 
@@ -193,7 +193,7 @@ int main()
     test("/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/read_1.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/exp_1.txt"); // 0
     test("/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/read_2.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/exp_2.txt"); // 38
     test("/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/read_3.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/exp_3.txt"); // 3512894
-    test("/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/read_4.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/exp_4.txt"); // 61
+    test("/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/read_4.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/exp_4.txt"); // 61 не правильный тест
     test("/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/read_5.txt", "/Users/vladislavborzyaev/Coding/ЯП/cpp-lab/cpp-lab-3/tests/exp_5.txt"); // 0
 
     return 0;
