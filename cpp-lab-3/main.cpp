@@ -9,8 +9,8 @@ void merge(long long arr[], long long left, long long mid, long long right)
     long long l1 = mid - left + 1;
     long long l2 = right - mid;
 
-    long long L[l1]; 
-    long long R[l2];
+    long long *L = new long long [l1]; 
+    long long *R = new long long [l2];
 
     for (long long i = 0; i < l1; i++)
         L[i] = arr[left + i];
@@ -51,6 +51,10 @@ void merge(long long arr[], long long left, long long mid, long long right)
         j++;
         k++;
     }
+
+    delete[] L;
+    delete[] R;
+
 }
 
 void Merge_Sort(long long arr[], long long left, long long right)
@@ -112,7 +116,8 @@ long kasha(char *in_)
     int n;
     read_f >> n;
 
-    long long int left[n / 2], right[n / 2 + n % 2];
+    long long int *left = new long long[n / 2];
+    long long int *right = new long long [(n / 2 + n % 2)];
     long long total_sum = 0;
 
     for (int i = 0; i < n / 2; i++)
@@ -130,22 +135,28 @@ long kasha(char *in_)
     read_f.close();
 
 
-    long long int leftSums[1 << n / 2], rightSums[1 << (n / 2 + n % 2)];
+    long long *leftSums = new long long [1 << (n / 2)];
+    long long *rightSums = new long long [1 << (n / 2 + n % 2)];
     long long min_diff = total_sum;
     long long target = total_sum / 2;
 
     fill_sums_array(leftSums, n / 2, left);
     fill_sums_array(rightSums, n / 2 + n % 2, right);
 
+    delete[] left;
+    delete[] right;
+
     Merge_Sort(rightSums, 0, (1 << n / 2 + n % 2) - 1);
 
-    for (long long left_sum : leftSums)
+    for (long long i = 0; i < 1 << n / 2; i++)
     {
+        long long left_sum = leftSums[i];
         if (left_sum <= target)
             min_diff = min(min_diff, 2 * binary_search(rightSums, 1 << (n / 2 + n % 2), target - left_sum) + total_sum % 2);
     }
 
-    return min_diff;
+    delete[] leftSums;
+    delete[] rightSums;
 }
 
 
