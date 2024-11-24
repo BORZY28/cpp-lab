@@ -120,6 +120,7 @@ class Customer
         void autantification(string login, string password, char * file)
         {
             string str_data = "";
+            string str_data_count = "";
             size_t count_log = 0;
             size_t count_pas = 0;
             bool flag = false;
@@ -129,10 +130,9 @@ class Customer
             {
                 while(getline(f_users, check_all, ';'))
                 {
-                    if (count_log%5 == 0)
-                        id = count_log;
+                    id = (count_log/5);
                     
-                    else if (count_log%5 == 3)
+                    if (count_log%5 == 3)
                         check_log = check_all;
 
                     else if (count_pas%5 == 4)
@@ -147,17 +147,24 @@ class Customer
                     count_log ++;
                     count_pas ++; 
                 }
+
+
             
                 if (!flag)
                     throw "Wrong login or password";
             }
 
+            else
+                throw "No data";
+
             f_users.seekg(0, ios::beg);
 
             for (size_t i = 0; i <= id; ++i)
             {
+                getline(f_users, str_data_count);
+
                 if (i == id)
-                    getline(f_users, str_data);
+                    str_data = str_data_count;
             }
                     
             f_users.close();
@@ -165,10 +172,14 @@ class Customer
             stringstream user_data;
             user_data << str_data;
             
-
             size_t i = 0;
-            while (getline(user_data, data[i], ';'))
+            while (getline(user_data, str_data, ';'))
+            {   
+                data[i] = str_data;
                 ++i;
+            }
+
+            user_data.clear();
         }
 
         string return_data(size_t i)
@@ -270,18 +281,18 @@ void registration(Customer& client, char * file)
 
 int main()
 {
-    Customer client;
+    
     string login, password = "";
 
     bool flag = true;
     size_t step = 10;
 
-    cout << "Салам, регистрируйся, какашка\n";
-
-    Customer client1;
+    cout << "Салам, какашка\n";
 
     while (flag)
     {
+        Customer client;
+
         string login, password = "";
 
         flag = false; 
@@ -329,15 +340,15 @@ int main()
                 }
             } 
 
-            cout << client.return_data(0) << " "<< client.return_data(1) << " " << client.return_data(2) << " " << client.return_data(3)<< " " << client.return_data(4) << endl;
+            cout << "Вы зашли, как пользователь: " << client.return_data(1) << ' ' << client.return_data(2) << endl;
         }   
         
     
         else if (step == 0)
             flag = false;
 
-        
+        client.~Customer();
     }
-    client.~Customer();
+    
     return 0;
 }
