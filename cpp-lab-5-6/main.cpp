@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <ctime>
 
 using namespace std;
 
@@ -15,10 +16,8 @@ class Customer
 
     string check_all;
     string check_log;
-    string check_pas;
+    string check_pas;    
     
-
-
     public:
 
         long id;
@@ -191,21 +190,83 @@ class Customer
 
 class BankAccount{
     protected:
+        string user_id;
+        bool type;
         float balance;
-        size_t user_id;
+        string creation_time_utc;
+        time_t now;
+        tm *ltm;
+
+        BankAccount()
+        {
+            balance = 0;
+            user_id = "";
+            now = time(0);
+            ltm = localtime(&now);
+            type = 0;
+        }
+        ~BankAccount(){}
+
+    public:
+
+        string get_creation_time()
+        {
+            stringstream creation_time_utc_stream;
+            creation_time_utc_stream << ltm->tm_mday << ' ' << 1 + ltm->tm_mon << ' ' << 1970 + ltm->tm_year;
+            
+            getline(creation_time_utc_stream, creation_time_utc);
+            return creation_time_utc;  //return UTC date 
+        }
+
+        void set_id(Customer& client)
+        {
+            user_id = client.return_data(0);
+        }
+
+             
 };
 
 class SavingAccount : public BankAccount{
-    string creation_date;
-    int procent;
+    string data[4];
+
+    SavingAccount()
+    {
+        string data[4] = {"", "", "", ""};
+        type = 0;
+    }
+    public:
+        float procent;
+        
+    string return_data(size_t i)
+    {
+        return data[i];
+    }
+
 };
 
 class CheckingAccount : public BankAccount{
+    string data[4];
 
+    CheckingAccount()
+    {
+        string data[4] = {"", "", "", ""};
+        type = 1;
+    }
+
+    string return_data(size_t i)
+    {
+        return data[i];
+    }
 };
 
 class Transaction{
+    void withdraw(CheckingAccount& account, float summ) {}
+    void withdraw  (SavingAccount& account, float summ) {}
 
+    void deposit (CheckingAccount& account, float summ) {}
+    void deposit   (SavingAccount& account, float summ) {}
+
+    virtual void writing_logs(char * file) = 0; 
 };
 
 void registration(Customer& client, char * file)
@@ -342,12 +403,10 @@ int main()
 
             cout << "Вы зашли, как пользователь: " << client.return_data(1) << ' ' << client.return_data(2) << endl;
         }   
-        
     
         else if (step == 0)
             flag = false;
 
-        client.~Customer();
     }
     
     return 0;
