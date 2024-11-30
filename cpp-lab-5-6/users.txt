@@ -1,0 +1,15 @@
+0;borzyaev;vladislav;yato;1234;
+1;Менщиков;Александр;RANDIK;30122005;
+2;Sanochkin;Egogor;GlobuzZ;traTaTa1;
+3;Borzyaev;Denis;chimgan;12321;
+4;Evstigneyeva;Nata;slonatka;223344;
+5;wers;weer;yato_1;1234;
+6;ee;ss;qq;ww;
+7;Borzyaeva;Katerina;trololo1957;olold14310;
+8;w;w;1;1;
+9;rfrf;rtrt;trolebuzina;1905;
+10;w;e;2;1;
+11;akkerman;daniel;akkerman;1234567;
+12;akkerman;daniel;akkerman_1;1234;
+13;bruh;vvv;aaaaa;1111;
+14;Sidorov;Evgeniy;hui;pizda;
