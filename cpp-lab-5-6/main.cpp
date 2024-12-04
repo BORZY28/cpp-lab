@@ -2,272 +2,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <ctime>
-
-using namespace std;
-
-// класс клиент, имеющий характерстики: id, логин, пароль, фамилия, имя. 
-class Customer
-{
-    string login;
-    string password;
-    string data[5];
-    string id_str;
-
-    string check_all;
-    string check_log;
-    string check_pas;    
-    
-    public:
-
-        long id;
-        string first_name;
-        string last_name;
-
-        Customer()
-        {
-            login = "";
-            password = "";
-            string data[5] = {"", "", "", "", ""};
-            first_name = "";
-            last_name = "";
-            id_str = "";
-            id = -1;
-        }
-        ~Customer(){} //он есть
-
-        void set_login(char * file)
-        {
-            size_t count = 0;
-            cin >> login;
-            ifstream f_users(file);
-
-            if (f_users.peek() != EOF)
-            while(getline(f_users, check_log, ';'))
-            {
-                if (count%5 == 3)
-                    if (check_log == login) 
-                    {
-                        throw (check_log == login);
-                    }
-
-                count ++;
-            }
-
-            data[3] = login;
-        }
-
-        void set_password()
-        {
-            cin >> password;
-            data[4] = password;
-        }
-
-        void set_id(char * file)
-        {
-            ifstream f_users(file);
-
-            if (f_users.peek() != EOF)
-            {
-                while(getline(f_users, id_str))
-                {
-                    id += 1;
-                }
-            }
-
-            data[0] = to_string(id + 1);
-            f_users.close();
-        }   
-            
-        void set_last_name()
-        {   
-            cin >> last_name;
-            for (size_t i = 0; i < last_name.length(); i++)
-            {
-                if (isdigit(last_name[i]) || ispunct(last_name[i]) || isspace(last_name[i]))
-                {
-                    throw (isdigit(last_name[i]) || ispunct(last_name[i]) || isspace(last_name[i]));
-                }
-            }
-            data[1] = last_name;
-
-        }
-
-        void get_last_name()
-        {
-            cout << "Фамилия клиента -> " << data[1];
-        }
-
-        void set_first_name()
-        {   
-            cin >> first_name;
-            for (size_t i = 0; i < first_name.length(); i++)
-            {
-                if (isdigit(first_name[i]) || ispunct(first_name[i]) || isspace(first_name[i]))
-                {
-                    throw (isdigit(first_name[i]) || ispunct(first_name[i]) || isspace(first_name[i]));
-                }
-            }
-            data[2] = first_name;
-        }
-
-        void get_first_name()
-        {
-            cout << "Имя клиента -> " << data[2];
-        }
-
-        void autantification(string login, string password, char * file)
-        {
-            string str_data = "";
-            string str_data_count = "";
-            size_t count_log = 0;
-            size_t count_pas = 0;
-            bool flag = false;
-            ifstream f_users(file);
-
-            if (f_users.peek() != EOF)            // проверка логина и пароля в строке, если не находим в файле, то выкидывание ошибки по средствам флага
-            {
-                while(getline(f_users, check_all, ';'))
-                {
-                    id = (count_log/5);
-                    
-                    if (count_log%5 == 3)
-                        check_log = check_all;
-
-                    else if (count_pas%5 == 4)
-                        check_pas = check_all;
-                    
-                    if (check_log == login && check_pas == password && count_log == count_pas)
-                    {
-                        flag = true;
-                        break;
-                    }
-
-                    count_log ++;
-                    count_pas ++; 
-                }
-
-
-            
-                if (!flag)
-                    throw "Wrong login or password";
-            }
-
-            else
-                throw "No data";
-
-            f_users.seekg(0, ios::beg);
-
-            for (size_t i = 0; i <= id; ++i)
-            {
-                getline(f_users, str_data_count);
-
-                if (i == id)
-                    str_data = str_data_count;
-            }
-                    
-            f_users.close();
-
-            stringstream user_data;
-            user_data << str_data;
-            
-            size_t i = 0;
-            while (getline(user_data, str_data, ';'))
-            {   
-                data[i] = str_data;
-                ++i;
-            }
-
-            user_data.clear();
-        }
-
-        string return_data(size_t i)
-
-        {
-            return data[i];
-        }
-};
-
-class BankAccount{
-    protected:
-        string user_id;
-        bool type;
-        float balance;
-        string creation_time_utc;
-        time_t now;
-        tm *ltm;
-
-        BankAccount()
-        {
-            balance = 0;
-            user_id = "";
-            now = time(0);
-            ltm = localtime(&now);
-            type = 0;
-        }
-        ~BankAccount(){}
-
-    public:
-
-        string get_creation_time()
-        {
-            stringstream creation_time_utc_stream;
-            creation_time_utc_stream << ltm->tm_mday << ' ' << 1 + ltm->tm_mon << ' ' << 1970 + ltm->tm_year;
-            
-            getline(creation_time_utc_stream, creation_time_utc);
-            return creation_time_utc;  //return UTC date 
-        }
-
-        void set_id(Customer& client)
-        {
-            user_id = client.return_data(0);
-        }
-
-             
-};
-
-class SavingAccount : public BankAccount{
-    string data[4];
-
-    SavingAccount()
-    {
-        string data[4] = {"", "", "", ""};
-        type = 0;
-    }
-    public:
-        float procent;
-        
-    string return_data(size_t i)
-    {
-        return data[i];
-    }
-
-};
-
-class CheckingAccount : public BankAccount{
-    string data[4];
-
-    CheckingAccount()
-    {
-        string data[4] = {"", "", "", ""};
-        type = 1;
-    }
-
-    string return_data(size_t i)
-    {
-        return data[i];
-    }
-};
-
-class Transaction{
-    void withdraw(CheckingAccount& account, float summ) {}
-    void withdraw  (SavingAccount& account, float summ) {}
-
-    void deposit (CheckingAccount& account, float summ) {}
-    void deposit   (SavingAccount& account, float summ) {}
-
-    virtual void writing_logs(char * file) = 0; 
-};
+#include "bank.hpp"
 
 void registration(Customer& client, char * file)
 {
@@ -302,7 +37,7 @@ void registration(Customer& client, char * file)
             client.set_last_name();
             flag = 1;
         }
-        catch(bool error)
+        catch(std::invalid_argument)
         {
             cout << "Введены недопустимые символы" << endl << "Повторите ввод фамилии" << endl;
             flag = 0;
@@ -319,7 +54,7 @@ void registration(Customer& client, char * file)
             client.set_first_name();
             flag = 1;
         }
-        catch(bool error)
+        catch(std::invalid_argument)
         {
             
             cout << "Введены недопустимые символы" << endl << "Повторите ввод" << endl;
@@ -331,14 +66,13 @@ void registration(Customer& client, char * file)
 
     ofstream f_users(file, ios::app);
     for (size_t i = 0; i < 5; ++i)
-    {
+    { 
         f_users << client.return_data(i) << ';';
-    }
+    } 
 
     f_users << "\n";
     f_users.close();
-};
-
+}; 
 
 int main()
 {
@@ -350,6 +84,8 @@ int main()
 
     cout << "Салам, какашка\n";
 
+
+    // Цикл главного меню
     while (flag)
     {
         Customer client;
@@ -358,9 +94,12 @@ int main()
 
         flag = false; 
 
+
         cout << "Введите 1, чтобы зарегистрировать пользователя\nВведите 2, чтобы войти в аккаунт\nВведите 0, чтобы завершить сеанс\n";
         cin >> step;
 
+
+        // Регистрация нового пользователя
         if (step == 1)
         {
             registration(client, "users.txt");
@@ -372,6 +111,7 @@ int main()
                 cout << client.return_data(i) << endl;
         }
 
+        // Вход в аккаунт
         else if(step == 2)
         {
 
@@ -385,28 +125,166 @@ int main()
                     cout << "Введите свой пароль -> ";
                     cin >> password;
 
-                    // зависает после ввода логина и пароля: порешали
-
                     client.autantification(login, password, "users.txt");
-                    flag = true;
-
+                    
                     // дальше работаем с клиентом, данные в него записались
+
+                    cout << "Вы зашли, как пользователь: " << client.return_data(1) << ' ' << client.return_data(2) << endl;
+
+                    bool count_1, exist_1, count_2, exist_2, account_flag = 0;
+                    while(!account_flag)
+                    {
+                        size_t account_step = 10;
+
+                        SavingAccount saving_account("12"), *saving_acc; saving_account.set_id(client);
+                        saving_acc = &saving_account;
+                        
+                        CheckingAccount checking_account, *check_acc; checking_account.set_id(client);
+                        check_acc = &checking_account;
+                        
+                        saving_acc->set_data();
+                        check_acc ->set_data();
+                        
+                        //check
+                        /*
+                        cout << saving_acc->get_data(0) << ';' << saving_acc->get_data(1)
+                             << ';' << saving_acc->get_data(2) << ';' << saving_acc->get_data(3)
+                             << ';' << saving_acc->get_data(4) << endl;
+
+                        cout << check_acc->get_data(0) << ';' << check_acc->get_data(1)
+                             << ';' << check_acc->get_data(2) << ';' << check_acc->get_data(3)
+                             << ';' << check_acc->get_data(4) << endl;
+                        */
+                        //check
+                        
+
+                        // Попытка получить данные сберегательного счёта
+                        try { saving_acc->input_data("accounts.txt"); count_1 = true; exist_1 = true; }
+
+                        // Обработка ошибок при отсутствии счета или данных о счетах в принципе
+                        //
+                        catch(std::invalid_argument)
+                        {
+                            cout << "|      У вас нет сберегательного счёта       |       ";
+                            count_1 = false;
+                            exist_1 = false;
+                        }
+                        catch(std::out_of_range)
+                        {
+                            cout << "|       У вас нет сберегательного счёта        |       ";
+                            count_1 = false;
+                            exist_1 = false;
+                        }
+                        //
+ 
+                        // Попытка получить данные текущего счёта
+                        try { check_acc->input_data("accounts.txt"); count_2 = true; exist_2 = true; }
+
+                        // Обработка ошибок при отсутствии счета или данных о счетах в принципе
+                        //
+                        catch(std::invalid_argument)
+                        {
+                            cout << "|      У вас нет текущего счёта    4   |" << endl;
+                            count_2 = false;
+                            exist_2 = false;
+                        }
+                        catch(std::out_of_range)
+                        {
+                            cout << "|      У вас нет текущего счёта    5    |" << endl;
+                            count_2 = false;
+                            exist_2 = false;
+                        }
+                        //
+                        
+                        if (!count_1)
+                        {
+                            account_step = 10;
+
+                            cout << "Предлагаем создать сберегательный счёт\nВведите 1, чтобы создать счёт | 2, чтобы игнорировать\n";
+ 
+                            while (!count_1)
+                            {
+                                cin >> account_step;
+
+                                if (account_step == 1) 
+                                {
+                                    
+                                    saving_acc->create_acc("accounts.txt");
+                                    cout << "Ваш сберегательный счёт создан\n";
+                                    cout << "Владелец счёта: " << client.return_data(1) << ' ' << client.return_data(2) << endl;
+                                    cout << "Cчёт создан: " << saving_acc->get_data(3) << endl;
+                                    cout << "Баланс: " << saving_acc->get_data(4) << endl;
+                                    count_1 = true;
+                                    exist_1 = true;
+                                }
+
+                                else if (account_step == 2) { count_1 = true; exist_1 = false; cout << "Счёт не создан" << endl; }
+
+                                else 
+                                {
+                                    cout << "Введены недопустимые символы\nПовторите ввод\n"; 
+                                    cout << "Введите 1, чтобы создать счёт\n2 чтобы игнорировать\n";
+                                }
+                            }
+
+                        }
+
+                        if (!count_2) 
+                        {
+                            account_step = 10;
+
+                            cout << "Предлагаем создать текущий счёт\nВведите 1, чтобы создать счёт | 2, чтобы игнорировать\n";
+
+                            while (!count_2)
+                            {
+                                cin >> account_step;
+
+                                if (account_step == 1) 
+                                {
+                                    check_acc->create_acc("accounts.txt");
+                                    cout << "Ваш текущий счёт создан\n";
+                                    cout << "Владелец счёта: " << client.return_data(1) << ' ' << client.return_data(2) << endl;
+                                    cout << "Cчёт создан: " << check_acc->get_data(3) << endl;
+                                    cout << "Баланс: " << check_acc->get_data(4) << endl;
+                                    count_2 = true;
+                                    exist_2 = true;
+                                }
+
+                                else if (account_step == 2) {count_2 = true; exist_2 = false; cout << "Счёт не создан" << endl; }
+
+                                else
+                                {
+                                    cout << "Введены недопустимые символы\nПовторите ввод\n"; 
+                                    cout << "Введите 1, чтобы создать счёт\n2 чтобы игнорировать\n";
+                                }
+                            }
+                        }
+
+                        account_flag = true;
+
+                    }
+
+                    flag = true;
                 }
 
-
-                catch(char const*)
+                // Обработка ошибок при аутантификации
+                catch(std::invalid_argument)
                 {
                     cout << "Неправильный логин или пароль" << endl << "Повторите ввод" << endl;
                     flag = false;
                 }
+
+                catch(std::out_of_range)
+                {
+                    cout << "Нет зарегистрированных пользователей" << endl;
+                    flag = true;
+                }
             } 
 
-            cout << "Вы зашли, как пользователь: " << client.return_data(1) << ' ' << client.return_data(2) << endl;
         }   
     
         else if (step == 0)
             flag = false;
-
     }
     
     return 0;
