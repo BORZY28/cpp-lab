@@ -159,7 +159,7 @@ long kasha(char *in_)
     delete[] rightSums;
 
     return min_diff;
-}
+} 
 
 
 void test(char *read, char *exp)

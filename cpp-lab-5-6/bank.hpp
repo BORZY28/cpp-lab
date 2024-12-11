@@ -216,7 +216,7 @@ class BankAccount{
 
         void set_id(Customer& client) { user_id = client.return_data(0); }
         
-
+        void set_balance(string summ) {balance = summ;}
         virtual string get_user_id() {return user_id;}
         virtual string get_type()    {return type;}
 
@@ -249,8 +249,6 @@ class SavingAccount : public BankAccount{
         ~SavingAccount() {}
 
         string get_procent() {return procent;}
-
-        
 
         void set_data() 
         {
@@ -321,7 +319,7 @@ class SavingAccount : public BankAccount{
                     << ';' << data[2] << ';' << data[3]
                     << ';' << data[4] << ";\n;";
             f_accounts.close();
-        };
+        }
 };
 
 class CheckingAccount : public BankAccount{
@@ -329,6 +327,8 @@ class CheckingAccount : public BankAccount{
     public:
         CheckingAccount() {type = "1";}
         ~CheckingAccount() {};
+
+        
 
         void set_data() 
         {
@@ -399,11 +399,357 @@ class CheckingAccount : public BankAccount{
 };
 
 class Transaction{
-    void withdraw(CheckingAccount& account, float summ) {}
-    void withdraw  (SavingAccount& account, float summ) {}
+    float balance_1, balance_2;
+    public:
+        Transaction(){balance_1 = 0; balance_2 = 0;}
+        ~Transaction(){}
 
-    void deposit (CheckingAccount& account, float summ) {}
-    void deposit   (SavingAccount& account, float summ) {}
+        virtual void withdraw(CheckingAccount * account, float summ, char * file) 
+        {
+            if (summ > 0)
+            {
+                string check_all, check_id, check_type;
+                float balance;
+                string str_balance = "";
+                stringstream balance_stream;
+                balance_stream << account->get_data(4);
+                balance_stream >> balance;
+                balance_1 = balance;
+                balance_stream.clear();
+                if (summ <= balance)
+                {
+                    balance -= summ;
+                }
+                else throw std::out_of_range("No money");
+                balance_2 = balance;
 
-    virtual void writing_logs(char * file) = 0; 
+                balance_stream << balance;
+                balance_stream >> str_balance;
+                balance_stream.clear();
+                account->set_balance(str_balance);
+                account->set_data();
+
+
+                size_t count = 0;
+                size_t len_f = 0;
+                bool flag_id, flag_type = false; size_t balance_flag = 0;
+                check_id = account->get_data(0); check_type = account->get_data(1);
+
+                fstream f_accounts(file);
+                while(getline(f_accounts, check_all, ';')) 
+                {
+                    if (count%6 == 0 && check_id == check_all) flag_id = true;
+                    if (count%6 == 1 && check_type == check_all && flag_id) flag_type = true;
+
+                    if (count%6 == 4 && flag_id && flag_type) balance_flag = count;
+                    if (count%6 == 5) flag_id = 0, flag_type = 0;
+                    count ++;
+                }
+                f_accounts.close();
+
+                len_f = count; count = 0;
+                string *arr_f = new string [len_f];
+
+                fstream f_accounts_1(file);
+                while(getline(f_accounts_1, check_all, ';')) 
+                {
+                    arr_f[count] = check_all;
+                    count ++;
+                }
+                f_accounts_1.close();
+                remove(file);
+                
+                arr_f[balance_flag] = str_balance;
+
+                ofstream f_accounts_2(file);
+                for (size_t i = 0; i < count-1; i += 6)
+                {
+                    f_accounts_2 << arr_f[i] << ';' << arr_f[i+1] 
+                    << ';' << arr_f[i+2] << ';' << arr_f[i+3]
+                    << ';' << arr_f[i+4] << ";\n;";
+                } 
+
+                f_accounts_2.close();
+                delete[] arr_f;
+            }
+            else 
+                throw std::invalid_argument("Invalid argument, summ <= 0 | waiting summ > 0");
+        }
+        virtual void withdraw  (SavingAccount * account, float summ, char * file) 
+        {
+            if (summ > 0)
+            {
+                string check_all, check_id, check_type;
+                float balance;
+                string str_balance = "";
+                stringstream balance_stream;
+                balance_stream << account->get_data(4);
+                balance_stream >> balance;
+                balance_1 = balance;
+                balance_stream.clear();
+                if (summ <= balance)
+                {
+                    balance -= summ;
+                }
+                else throw std::out_of_range("No money");
+                balance_2 = balance;
+
+                balance_stream << balance;
+                balance_stream >> str_balance;
+                balance_stream.clear();
+                account->set_balance(str_balance);
+                account->set_data();
+
+
+                size_t count = 0;
+                size_t len_f = 0;
+                bool flag_id, flag_type = false; size_t balance_flag = 0;
+                check_id = account->get_data(0); check_type = account->get_data(1);
+
+                fstream f_accounts(file);
+                while(getline(f_accounts, check_all, ';')) 
+                {
+                    if (count%6 == 0 && check_id == check_all) flag_id = true;
+                    if (count%6 == 1 && check_type == check_all && flag_id) flag_type = true;
+
+                    if (count%6 == 4 && flag_id && flag_type) balance_flag = count;
+                    if (count%6 == 5) flag_id = 0, flag_type = 0;
+                    count ++;
+                }
+                f_accounts.close();
+
+                len_f = count; count = 0;
+                string *arr_f = new string [len_f];
+
+                fstream f_accounts_1(file);
+                while(getline(f_accounts_1, check_all, ';')) 
+                {
+                    arr_f[count] = check_all;
+                    count ++;
+                }
+                f_accounts_1.close();
+                remove(file);
+                
+                arr_f[balance_flag] = str_balance;
+
+                ofstream f_accounts_2(file);
+                for (size_t i = 0; i < count-1; i += 6)
+                {
+                    f_accounts_2 << arr_f[i] << ';' << arr_f[i+1] 
+                    << ';' << arr_f[i+2] << ';' << arr_f[i+3]
+                    << ';' << arr_f[i+4] << ";\n;";
+                } 
+
+                f_accounts_2.close();
+                delete[] arr_f;
+            }
+            else 
+                throw std::invalid_argument("Invalid argument, summ <= 0 | waiting summ > 0");
+        }
+
+        virtual void deposit(CheckingAccount  *  account, float summ, char * file) 
+        {
+            if (summ > 0)
+            {
+                string check_all, check_id, check_type;
+                float balance;
+                string str_balance = "";
+                stringstream balance_stream;
+                balance_stream << account->get_data(4);
+                balance_stream >> balance;
+                balance_1 = balance;
+                balance_stream.clear();
+
+                balance += summ;
+                balance_2 = balance;
+
+                balance_stream << balance;
+                balance_stream >> str_balance;
+                balance_stream.clear();
+                account->set_balance(str_balance);
+                account->set_data();
+
+
+                size_t count = 0;
+                size_t len_f = 0;
+                bool flag_id, flag_type = false; size_t balance_flag = 0;
+                check_id = account->get_data(0); check_type = account->get_data(1);
+
+                fstream f_accounts(file);
+                while(getline(f_accounts, check_all, ';')) 
+                {
+                    if (count%6 == 0 && check_id == check_all) flag_id = true;
+                    if (count%6 == 1 && check_type == check_all && flag_id) flag_type = true;
+
+                    if (count%6 == 4 && flag_id && flag_type) balance_flag = count;
+                    if (count%6 == 5) flag_id = 0, flag_type = 0;
+                    count ++;
+                }
+                f_accounts.close();
+
+                len_f = count; count = 0;
+                string *arr_f = new string [len_f];
+
+                fstream f_accounts_1(file);
+                while(getline(f_accounts_1, check_all, ';')) 
+                {
+                    arr_f[count] = check_all;
+                    count ++;
+                }
+                f_accounts_1.close();
+                remove(file);
+                
+                arr_f[balance_flag] = str_balance;
+
+                ofstream f_accounts_2(file);
+                for (size_t i = 0; i < count-1; i += 6)
+                {
+                    f_accounts_2 << arr_f[i] << ';' << arr_f[i+1] 
+                    << ';' << arr_f[i+2] << ';' << arr_f[i+3]
+                    << ';' << arr_f[i+4] << ";\n;";
+                } 
+
+                f_accounts_2.close();
+                delete[] arr_f;
+            }
+            else 
+                throw std::invalid_argument("Invalid argument, summ <= 0 | waiting summ > 0");
+        }
+        virtual void deposit   (SavingAccount * account, float summ, char * file) 
+        {
+            if (summ > 0)
+            {
+                string check_all, check_id, check_type;
+                float balance; 
+                string str_balance = "";
+                stringstream balance_stream;
+                balance_stream << account->get_data(4);
+                balance_stream >> balance;
+                balance_1 = balance;
+                balance_stream.clear();
+
+                balance += summ;
+                balance_2 = balance;
+
+                balance_stream << balance;
+                balance_stream >> str_balance;
+                balance_stream.clear();
+                account->set_balance(str_balance);
+                account->set_data();
+
+                size_t count = 0;
+                size_t len_f = 0;
+                bool flag_id, flag_type = false; size_t balance_flag = 0;
+                check_id = account->get_data(0); check_type = account->get_data(1);
+
+                fstream f_accounts(file);
+                while(getline(f_accounts, check_all, ';')) 
+                {
+                    if (count%6 == 0 && check_id == check_all) flag_id = true;
+                    if (count%6 == 1 && check_type == check_all && flag_id) flag_type = true;
+
+                    if (count%6 == 4 && flag_id && flag_type) balance_flag = count;
+                    if (count%6 == 5) flag_id = 0, flag_type = 0;
+                    count ++;
+                }
+                f_accounts.close();
+
+                len_f = count; count = 0;
+                string *arr_f = new string [len_f];
+
+                fstream f_accounts_1(file);
+                while(getline(f_accounts_1, check_all, ';')) 
+                {
+                    arr_f[count] = check_all;
+                    count ++;
+                }
+                f_accounts_1.close();
+                remove(file);
+                
+                arr_f[balance_flag] = str_balance;
+
+                ofstream f_accounts_2(file);
+                for (size_t i = 0; i < count-1; i += 6)
+                {
+                    f_accounts_2 << arr_f[i] << ';' << arr_f[i+1] 
+                    << ';' << arr_f[i+2] << ';' << arr_f[i+3]
+                    << ';' << arr_f[i+4] << ";\n;";
+                }
+
+                f_accounts_2.close();
+                delete[] arr_f;
+            }
+            else
+                throw std::invalid_argument("Invalid argument, summ <= 0 | waiting summ > 0");
+        }
+
+        virtual void writing_logs(SavingAccount * account, char * file) 
+        {
+            fstream f_logs(file, ios::app);
+            f_logs << account->get_data(0) << ';' << account->get_data(1) << ';' << balance_1 << ';' << balance_2 << ';' << "\n" << ';';
+            f_logs.close();
+        }; 
+        virtual void writing_logs(CheckingAccount * account, char * file) 
+        {
+            fstream f_logs(file, ios::app);
+            f_logs << account->get_data(0) << ';' << account->get_data(1) << ';' << balance_1 << ';' << balance_2 << ';' << "\n" << ';';
+            f_logs.close();
+        }; 
+
+        virtual void get_logs(SavingAccount* account, char * file)
+        {
+
+            string check_all;
+            size_t c = 0, count = 0;
+            bool id_flag = false;
+            bool type_flag = false;
+            fstream f_logs(file);
+            if (f_logs.peek() != EOF)
+            {
+                while (getline(f_logs, check_all, ';'))
+                {
+                    if (count%5 == 0 && check_all == account->get_data(0)) {id_flag = true; c++;}
+                    if (count%5 == 1 && check_all == account->get_data(1)) {type_flag = true; c++;}
+
+                    if (count%5 == 2 && id_flag && type_flag) {cout << check_all << " -> "; c++;}
+                    if (count%5 == 3 && id_flag && type_flag) {cout << check_all << endl; c++;}
+                    if (count%5 == 4) {id_flag = false; type_flag = false;}
+                    
+                    count ++;
+                }          
+                if (c == 0) throw std::out_of_range("No data");      
+
+            }
+
+            else
+                throw std::out_of_range("No data");
+        }
+        virtual void get_logs(CheckingAccount * account, char * file)
+        {
+
+            string check_all;
+            size_t c = 0, count = 0;
+            bool id_flag = false;
+            bool type_flag = false;
+            fstream f_logs(file);
+            if (f_logs.peek() != EOF)
+            {
+                while (getline(f_logs, check_all, ';'))
+                {
+                    if (count%5 == 0 && check_all == account->get_data(0)) {id_flag = true; c++;}
+                    if (count%5 == 1 && check_all == account->get_data(1)) {type_flag = true; c++;}
+
+                    if (count%5 == 2 && id_flag && type_flag) {cout << check_all << " -> "; c++;}
+                    if (count%5 == 3 && id_flag && type_flag) {cout << check_all << endl; c++;}
+                    if (count%5 == 4) {id_flag = false; type_flag = false;}
+                    
+                    count ++;
+                }          
+                if (c == 0) throw std::out_of_range("No data");      
+
+            }
+
+            else
+                throw std::out_of_range("No data");
+        }
 };

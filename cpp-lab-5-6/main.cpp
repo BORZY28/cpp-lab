@@ -165,13 +165,13 @@ int main()
                         //
                         catch(std::invalid_argument)
                         {
-                            cout << "|      У вас нет сберегательного счёта       |       ";
+                            cout << "|      У вас нет сберегательного счёта       |";
                             count_1 = false;
                             exist_1 = false;
                         }
                         catch(std::out_of_range)
                         {
-                            cout << "|       У вас нет сберегательного счёта        |       ";
+                            cout << "|       У вас нет сберегательного счёта        |";
                             count_1 = false;
                             exist_1 = false;
                         }
@@ -184,13 +184,13 @@ int main()
                         //
                         catch(std::invalid_argument)
                         {
-                            cout << "|      У вас нет текущего счёта    4   |" << endl;
+                            cout << "|      У вас нет текущего счёта       |" << endl;
                             count_2 = false;
                             exist_2 = false;
                         }
                         catch(std::out_of_range)
                         {
-                            cout << "|      У вас нет текущего счёта    5    |" << endl;
+                            cout << "|      У вас нет текущего счёта       |" << endl;
                             count_2 = false;
                             exist_2 = false;
                         }
@@ -228,7 +228,7 @@ int main()
                             }
 
                         }
-
+       
                         if (!count_2) 
                         {
                             account_step = 10;
@@ -259,11 +259,130 @@ int main()
                                 }
                             }
                         }
+                        bool flag_trans = false;
 
+                        while (!flag_trans)
+                        {
+                            size_t acc_step = 10;
+                            size_t acc_type = 10;
+                            Transaction trans;
+                            if (exist_1 && exist_2)
+                            {
+                                cout << "Вам доступны Сберегательный и текущий счёт" << endl;
+                                cout << "Cберегательный счёт: Баланс: " << saving_acc->get_data(4) << endl;
+                                cout << "Текущий счёт: Баланс: " << check_acc->get_data(4) << endl;
+                                cout << "Чтобы совершить операции введите номер из меню" << endl;
+                                cout << "1. Внести деньги\n2. Снять деньги\n3. Просмотреть историю счета\n0. Чтобы выйти\n";
+                                cin >> acc_step;
+                                if (acc_step == 1) 
+                                {
+                                    float summ = 0;
+                                    cout << "Введите 1, чтобы выбрать Сберегательный счёт, 2, чтобы выбрать Текущий счёт\n";
+                                    cin >> acc_type;
+                                    cout << "Введите сумму -> ";
+                                    cin >> summ;
+
+                                    if (acc_type == 1) {trans.deposit(saving_acc, summ, "accounts.txt"); trans.writing_logs(saving_acc, "logs.txt");}
+
+                                    else if (acc_type == 2) {trans.deposit(check_acc, summ, "accounts.txt"); trans.writing_logs(check_acc, "logs.txt");}
+                                }
+
+                                else if (acc_step == 2)
+                                {
+                                    cout << "Введите 1, чтобы выбрать Сберегательный счёт, 2, чтобы выбрать Текущий счёт\n";
+                                    cin >> acc_type;
+                                    float summ = 0;
+                                    cout << "Введите сумму -> ";
+                                    cin >> summ;
+
+                                    if (acc_type == 1) {trans.withdraw(saving_acc, summ, "accounts.txt"); trans.writing_logs(saving_acc, "logs.txt");}
+
+                                    else if (acc_type == 2) {trans.withdraw(check_acc, summ, "accounts.txt"); trans.writing_logs(check_acc, "logs.txt");}
+                                }
+
+                                else if (acc_step == 3)
+                                {
+                                    cout << "Введите 1, чтобы выбрать Сберегательный счёт, 2, чтобы выбрать Текущий счёт\n";
+                                    cin >> acc_type;
+                                    if (acc_type == 1) {trans.get_logs(saving_acc, "logs.txt");}
+                                    else if (acc_type == 2) {trans.get_logs(check_acc, "logs.txt");}
+                                }
+
+                                else flag_trans = true;
+
+                                
+                            }
+
+                            else if (exist_1)
+                            {
+                                cout << "Вам доступен только Сберегательный счёт" << endl;
+                                cout << "Cберегательный счёт: Баланс: " << saving_acc->get_data(4) << endl;
+                                cout << "Чтобы совершить операции введите номер из меню" << endl;
+                                cout << "1. Внести деньги\n2. Снять деньги\n3.Просмотреть историю счета\n";
+                                cin >> acc_step;
+                                if (acc_step == 1) 
+                                {
+                                    float summ = 0;
+                                    cout << "Введите сумму -> ";
+                                    cin >> summ;
+                                    trans.deposit(saving_acc, summ, "accounts.txt"); trans.writing_logs(saving_acc, "logs.txt");
+                                }
+
+                                else if (acc_step == 2)
+                                {
+
+                                    float summ = 0;
+                                    cout << "Введите сумму -> ";
+                                    cin >> summ;
+                                    trans.withdraw(saving_acc, summ, "accounts.txt"); trans.writing_logs(saving_acc, "logs.txt");
+                                }
+
+                                else if (acc_step == 3)
+                                {
+                                    trans.get_logs(saving_acc, "logs.txt");
+                                }
+
+                                else flag_trans = true;
+                            }
+
+                            else if (exist_2)
+                            {
+                                cout << "Вам доступен только Текущий счёт" << endl;
+                                cout << "Текущий счёт: Баланс: " << check_acc->get_data(4) << endl;
+                                cout << "Чтобы совершить операции введите номер из меню" << endl;
+                                cout << "1. Внести деньги\n2. Снять деньги\n3.Просмотреть историю счета";
+
+                                cin >> acc_step;
+                                if (acc_step == 1) 
+                                {
+                                    float summ = 0;
+                                    cout << "Введите сумму -> ";
+                                    cin >> summ;
+                                    trans.deposit(check_acc, summ, "accounts.txt"); trans.writing_logs(check_acc, "logs.txt");
+                                }
+
+                                else if (acc_step == 2)
+                                {
+
+                                    float summ = 0;
+                                    cout << "Введите сумму -> ";
+                                    cin >> summ;
+                                    trans.withdraw(check_acc, summ, "accounts.txt"); trans.writing_logs(check_acc, "logs.txt");
+                                }
+
+                                else if (acc_step == 3)
+                                {
+                                    trans.get_logs(check_acc, "logs.txt");
+                                }
+
+                                else flag_trans = true;
+                            }
+                            cout << "Выполнено\n";
+                            
+                        } 
                         account_flag = true;
 
                     }
-
                     flag = true;
                 }
 
@@ -279,8 +398,9 @@ int main()
                     cout << "Нет зарегистрированных пользователей" << endl;
                     flag = true;
                 }
-            } 
 
+                
+            } 
         }   
     
         else if (step == 0)
