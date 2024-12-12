@@ -1,17 +1,13 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include "bank.hpp"
+#include "bank.cpp"
 
 void registration(Customer& client, char * file)
 {
     bool flag = 0;
-
+ 
     while(!flag)
     {
         try
-        {
+        { 
             cout << "Введите логин -> ";;   
             client.set_login(file);
             flag = 1;
@@ -24,7 +20,7 @@ void registration(Customer& client, char * file)
     }
 
 
-    flag = 0;
+    flag = 0; 
 
     cout << "Введите пароль -> ";
     client.set_password(); 
@@ -82,7 +78,7 @@ int main()
     bool flag = true;
     size_t step = 10;
 
-    cout << "Салам, какашка\n";
+    cout << "prod. Yato\n";
 
 
     // Цикл главного меню
@@ -125,7 +121,7 @@ int main()
                     cout << "Введите свой пароль -> ";
                     cin >> password;
 
-                    client.autantification(login, password, "users.txt");
+                    client.authentication(login, password, "users.txt");
                     
                     // дальше работаем с клиентом, данные в него записались
 
@@ -211,9 +207,7 @@ int main()
                                     
                                     saving_acc->create_acc("accounts.txt");
                                     cout << "Ваш сберегательный счёт создан\n";
-                                    cout << "Владелец счёта: " << client.return_data(1) << ' ' << client.return_data(2) << endl;
-                                    cout << "Cчёт создан: " << saving_acc->get_data(3) << endl;
-                                    cout << "Баланс: " << saving_acc->get_data(4) << endl;
+                                    cout << saving_account;
                                     count_1 = true;
                                     exist_1 = true;
                                 }
@@ -377,11 +371,10 @@ int main()
 
                                 else flag_trans = true;
                             }
+                            else if (exist_1 && !exist_2) {flag_trans = true;}
                             cout << "Выполнено\n";
-                            
                         } 
                         account_flag = true;
-
                     }
                     flag = true;
                 }
@@ -406,6 +399,7 @@ int main()
         else if (step == 0)
             flag = false;
     }
+    cout << "До встречи" << endl;
     
     return 0;
 }
